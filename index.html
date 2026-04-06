@@ -3,70 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي - عالم الدراما التركية</title>
+    <title>محرك بحث القرمزي - بحث احترافي</title>
     <style>
-        /* التنسيق العام للخلفية */
+        /* تنسيق الصفحة الاساسي */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
-            align-items: center; height: 100vh; background-color: #0b0b0b !important;
+            align-items: center; height: 100vh; background-color: #0d0d0d;
             font-family: sans-serif; color: white;
         }
-        .main-wrapper { text-align: center; width: 90%; max-width: 650px; }
+        .main-wrapper { text-align: center; width: 90%; max-width: 600px; }
         
-        /* تنسيق الشعار */
-        .logo-section { margin-bottom: 35px; }
-        .logo-section img { 
-            max-width: 320px; height: auto; 
-            filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2)); 
+        .logo-section { margin-bottom: 40px; }
+        .logo-section img { max-width: 300px; height: auto; }
+
+        /* تصميم صندوق البحث اليدوي (بدون تدخل جوجل) */
+        .search-container { position: relative; width: 100%; }
+        
+        .custom-search-bar {
+            display: flex; align-items: center; background: #1a1a1a;
+            border-radius: 50px; padding: 5px 15px; border: 1px solid #333;
+            transition: 0.3s ease;
+        }
+        .custom-search-bar:focus-within {
+            border-color: #e50914;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
         }
 
-        /* اجبار محرك بحث جوجل على الاختفاء والظهور بتصميمنا */
-        .gsc-control-cse {
-            background-color: transparent !important;
-            border: none !important;
-            padding: 0 !important;
-        }
-        .gsc-search-button-v2, .gcsc-branding, .gsc-adBlock {
-            display: none !important; /* اخفاء شعار جوجل والازرار الزرقاء */
-        }
-        
-        /* تصميم مربع البحث الاحترافي */
-        input.gsc-input {
-            background: #1a1a1a !important;
-            border: 2px solid #333 !important;
-            border-radius: 50px !important;
-            color: white !important;
-            padding: 15px 25px !important;
-            font-size: 18px !important;
-            height: 55px !important;
-            outline: none !important;
-            text-align: right !important;
-            transition: 0.3s ease !important;
-        }
-        input.gsc-input:focus {
-            border-color: #e50914 !important;
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4) !important;
-            background: #222 !important;
+        input#userQuery {
+            flex: 1; background: transparent; border: none; padding: 15px;
+            color: white; font-size: 18px; outline: none; text-align: right;
         }
 
-        /* تنسيق قائمة الاقتراحات المنسدلة */
-        .gstl_50.gssb_c { z-index: 9999 !important; text-align: right !important; }
-        .gssb_m { 
-            background: #1a1a1a !important; 
-            color: white !important; 
-            border: 1px solid #333 !important;
-            border-radius: 0 0 20px 20px !important;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+        /* زر البحث الاحمر الصغير */
+        .search-btn {
+            background: #e50914; border: none; color: white;
+            padding: 10px 25px; border-radius: 40px; cursor: pointer;
+            font-weight: bold; font-size: 16px;
         }
-        .gssb_a td { 
-            background: #222 !important; 
-            color: #e50914 !important; 
-            padding: 10px 20px !important;
-            cursor: pointer;
+
+        /* قائمة الاقتراحات المنسدلة */
+        .results-box {
+            position: absolute; top: 110%; left: 0; right: 0;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 15px;
+            display: none; z-index: 1000; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
-        
-        .info-text { margin-top: 25px; color: #777; font-size: 14px; }
-        .highlight { color: #e50914; font-weight: bold; }
+        .result-item {
+            padding: 12px 20px; text-align: right; cursor: pointer;
+            border-bottom: 1px solid #222; color: #ccc; transition: 0.2s;
+        }
+        .result-item:hover { background: #e50914; color: white; }
+
+        /* اخفاء محرك بحث جوجل الاصلي تماما */
+        #hiddenGcse { display: none; }
     </style>
 </head>
 <body>
@@ -76,25 +65,72 @@
         <img src="kirmzi.tv.PNG" alt="القرمزي">
     </div>
 
-    <script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
-    <div class="gcse-searchbox-only" data-resultsUrl="https://kirmzi.tv/"></div>
+    <div class="search-container">
+        <div class="custom-search-bar">
+            <input type="text" id="userQuery" placeholder="ماذا تريد ان تشاهد اليوم؟" autocomplete="off">
+            <button class="search-btn" id="goSearch">بحث</button>
+        </div>
+        <div id="results" class="results-box"></div>
+    </div>
 
-    <div class="info-text">
-        ابحث عن احدث الحلقات في موقع <span class="highlight">القرمزي</span>
+    <div style="margin-top: 30px; color: #444; font-size: 14px;">
+        محرك بحث خاص بموقع kirmzi.tv
     </div>
 </div>
 
+<div id="hiddenGcse">
+    <script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
+    <div class="gcse-search"></div>
+</div>
+
 <script>
-    // وظيفة لتغيير نص المربع بعد تحميله من جوجل
-    window.onload = function() {
-        var checkInput = setInterval(function() {
-            var input = document.querySelector('input.gsc-input');
-            if (input) {
-                input.placeholder = "ابحث عن مسلسلك المفضل...";
-                clearInterval(checkInput);
-            }
-        }, 200);
+    const input = document.getElementById('userQuery');
+    const resultsBox = document.getElementById('results');
+    const btn = document.getElementById('goSearch');
+
+    // وظيفة للبحث عند ضغط الزر او Enter
+    const performSearch = () => {
+        const q = input.value;
+        if(q) window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(q)}`;
     };
+
+    btn.onclick = performSearch;
+    input.onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
+
+    // جلب الاقتراحات باستخدام JSONP لتفادي مشاكل التصميم
+    input.oninput = function() {
+        const q = this.value;
+        if(q.length < 2) { resultsBox.style.display = 'none'; return; }
+
+        const script = document.createElement('script');
+        script.src = `https://suggestqueries.google.com/complete/search?client=firefox&q=site:kirmzi.tv ${q}&callback=handleSuggest`;
+        document.body.appendChild(script);
+        document.body.removeChild(script);
+    };
+
+    window.handleSuggest = (data) => {
+        const suggestions = data[1];
+        if(suggestions.length > 0) {
+            resultsBox.innerHTML = '';
+            suggestions.slice(0, 5).forEach(s => {
+                const item = s.replace('site:kirmzi.tv', '').trim();
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerText = item;
+                div.onclick = () => {
+                    input.value = item;
+                    performSearch();
+                };
+                resultsBox.appendChild(div);
+            });
+            resultsBox.style.display = 'block';
+        } else {
+            resultsBox.style.display = 'none';
+        }
+    };
+
+    // اغلاق الاقتراحات عند الضغط خارجا
+    document.onclick = (e) => { if(!e.target.closest('.search-container')) resultsBox.style.display = 'none'; };
 </script>
 
 </body>
