@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محرك بحث القرمزي - عالم الدراما</title>
+
+    <!-- Google CSE مع تفعيل الاقتراحات -->
+    <script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
+
     <style>
-        /* الخلفية السوداء بالكامل كما طلبت */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
             align-items: center; height: 100vh; background-color: #0b0b0b;
             font-family: sans-serif; color: white; overflow: hidden;
         }
         .main-wrapper { text-align: center; width: 90%; max-width: 600px; position: relative; }
-        
-        /* تنسيق الشعار */
+
         .logo-section { margin-bottom: 35px; }
         .logo-section img { 
             max-width: 320px; height: auto; 
             filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); 
         }
 
-        /* تصميم صندوق البحث الاولي (نفس الشكل السابق) */
         .search-box-container { position: relative; width: 100%; }
-        
+
         .custom-bar {
             display: flex; align-items: center; background: #1a1a1a;
             border-radius: 50px; padding: 6px 10px; border: 1px solid #333;
@@ -34,12 +35,11 @@
         }
 
         input#mainSearch {
-            flex: 1; background: transparent !important; border: none !important;
-            padding: 12px 20px; color: white !important; font-size: 18px;
-            outline: none !important; text-align: right;
+            flex: 1; background: transparent; border: none;
+            padding: 12px 20px; color: white;
+            font-size: 18px; outline: none; text-align: right;
         }
 
-        /* زر البحث الاحمر داخل الصندوق */
         .btn-search {
             background: #e50914; border: none; color: white;
             padding: 10px 25px; border-radius: 40px; cursor: pointer;
@@ -47,7 +47,6 @@
         }
         .btn-search:hover { background: #ff121d; }
 
-        /* قائمة الاقتراحات (Autocomplete) بشكل متناسق جدا */
         #sugBox {
             position: absolute; top: 110%; left: 0; right: 0;
             background: #1a1a1a; border: 1px solid #333; border-radius: 15px;
@@ -82,53 +81,77 @@
 </div>
 
 <script>
-    const sInput = document.getElementById('mainSearch');
-    const sBox = document.getElementById('sugBox');
-    const sBtn = document.getElementById('execSearch');
+const sInput = document.getElementById('mainSearch');
+const sBox = document.getElementById('sugBox');
+const sBtn = document.getElementById('execSearch');
+let debounceTimer;
 
-    // وظيفة التوجيه لموقعك
-    function startSearch(val) {
-        if(val) window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
+// تنفيذ البحث
+function startSearch(val) {
+    if(val.trim() !== "") {
+        window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
+    }
+}
+
+sBtn.onclick = () => startSearch(sInput.value);
+
+sInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter") startSearch(this.value);
+    if(e.key === "Escape") sBox.style.display = "none";
+});
+
+// Debounce لمنع الضغط الزائد على السيرفر
+sInput.addEventListener("input", function(){
+    clearTimeout(debounceTimer);
+    const q = this.value.trim();
+    if(q.length < 2){
+        sBox.style.display = "none";
+        return;
     }
 
-    sBtn.onclick = () => startSearch(sInput.value);
-    sInput.onkeydown = (e) => { if(e.key === 'Enter') startSearch(sInput.value); };
+    debounceTimer = setTimeout(() => {
+        fetchSuggestions(q);
+    }, 300);
+});
 
-    // جلب الاقتراحات من محرك بحثك (تجاوز اللون الابيض وجوجل تماما)
-    sInput.oninput = function() {
-        const q = this.value;
-        if(q.length < 2) { sBox.style.display = 'none'; return; }
+// جلب الاقتراحات من Google CSE
+function fetchSuggestions(query){
+    const script = document.createElement("script");
+    script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=googleSuggest`;
+    document.body.appendChild(script);
+    document.body.removeChild(script);
+}
 
-        const script = document.createElement('script');
-        // هنا نستخدم تقنية تجلب الكلمات المرتبطة بموقعك فقط
-        script.src = `https://suggestqueries.google.com/complete/search?client=firefox&q=site:kirmzi.tv ${q}&callback=populate`;
-        document.body.appendChild(script);
-        document.body.removeChild(script);
-    };
+// عرض النتائج
+window.googleSuggest = function(data){
+    const suggestions = data[1];
+    sBox.innerHTML = "";
 
-    window.populate = (data) => {
-        const hits = data[1];
-        if(hits.length > 0) {
-            sBox.innerHTML = '';
-            hits.slice(0, 6).forEach(h => {
-                const clean = h.replace('site:kirmzi.tv', '').trim();
-                const d = document.createElement('div');
-                d.className = 'sug-item';
-                d.innerText = clean;
-                d.onclick = () => {
-                    sInput.value = clean;
-                    startSearch(clean);
-                };
-                sBox.appendChild(d);
-            });
-            sBox.style.display = 'block';
-        } else {
-            sBox.style.display = 'none';
-        }
-    };
+    if(suggestions.length === 0){
+        sBox.style.display = "none";
+        return;
+    }
 
-    // اخفاء القائمة عند النقر بعيدا
-    document.onclick = (e) => { if(!e.target.closest('.search-box-container')) sBox.style.display = 'none'; };
+    suggestions.slice(0,6).forEach(text => {
+        const div = document.createElement("div");
+        div.className = "sug-item";
+        div.textContent = text;
+        div.onclick = () => {
+            sInput.value = text;
+            startSearch(text);
+        };
+        sBox.appendChild(div);
+    });
+
+    sBox.style.display = "block";
+};
+
+// إخفاء القائمة عند الضغط خارجها
+document.addEventListener("click", function(e){
+    if(!e.target.closest(".search-box-container")){
+        sBox.style.display = "none";
+    }
+});
 </script>
 
 </body>
