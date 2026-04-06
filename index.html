@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي - مسلسلات وافلام تركية</title>
+    <title>محرك بحث القرمزي - عالم الدراما التركية</title>
     <style>
         body {
             margin: 0;
@@ -12,98 +12,118 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #0d0d0d;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0b0b; /* خلفية داكنة جدا وفخمة */
+            font-family: sans-serif;
+            color: white;
         }
-        .search-container {
+        .main-wrapper {
             text-align: center;
             width: 90%;
-            max-width: 600px;
+            max-width: 650px;
         }
-        .logo {
-            margin-bottom: 40px;
+        .logo-section {
+            margin-bottom: 35px;
         }
-        .logo img {
-            max-width: 280px; /* حجم الشعار */
+        .logo-section img {
+            max-width: 320px; /* حجم الشعار */
             height: auto;
-            filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.3));
+            /* تأثير اضاءة خفيف خلف الشعار */
+            filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2));
         }
-        .search-box {
+        .search-area {
             position: relative;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 5px;
+            border: 1px solid #333;
             display: flex;
             align-items: center;
+            transition: 0.3s ease;
+        }
+        .search-area:hover, .search-area:focus-within {
+            border-color: #e50914;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+            background: #222;
         }
         input[type="text"] {
-            width: 100%;
-            padding: 18px 25px;
-            border-radius: 50px; /* حواف دائرية اكثر احترافية */
-            border: 2px solid #e50914;
-            background: #1a1a1a;
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 25px;
             color: white;
             font-size: 18px;
             outline: none;
-            transition: 0.4s;
-            padding-left: 100px; /* مساحة للزر */
-        }
-        input[type="text"]:focus {
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
-            background: #222;
+            text-align: right;
         }
         button {
-            position: absolute;
-            left: 8px;
             background: #e50914;
-            border: none;
             color: white;
-            padding: 12px 25px;
+            border: none;
+            padding: 12px 30px;
             border-radius: 40px;
-            cursor: pointer;
             font-weight: bold;
+            cursor: pointer;
             font-size: 16px;
+            margin-left: 5px;
             transition: 0.3s;
         }
         button:hover {
-            background: #b20710;
-            transform: scale(1.05);
+            background: #ff0f1b;
+            transform: scale(1.02);
         }
-        .footer-text {
-            margin-top: 30px;
-            color: #666;
+        .info-text {
+            margin-top: 25px;
+            color: #777;
             font-size: 14px;
-            letter-spacing: 1px;
         }
-        .highlight {
+        .links {
+            margin-top: 15px;
+        }
+        .links a {
             color: #e50914;
-            font-weight: bold;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .links a:hover {
+            opacity: 1;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-<div class="search-container">
-    <div class="logo">
-        <img src="https://kirmzi.tv/wp-content/uploads/2023/12/logo-kirmzi.png" alt="شعار القرمزي">
+<div class="main-wrapper">
+    <div class="logo-section">
+        <img src="kirmzi.tv.PNG" alt="القرمزي">
     </div>
 
     <form action="https://kirmzi.tv/" method="GET" id="searchForm">
-        <div class="search-box">
-            <input type="text" name="s" placeholder="ابحث عن مسلسلك المفضل..." required>
-            <button type="submit">ابحث الان</button>
+        <div class="search-area">
+            <input type="text" name="s" placeholder="ابحث عن مسلسلاتك المفضلة..." required>
+            <button type="submit">بحث</button>
         </div>
     </form>
 
-    <div class="footer-text">
-        محرك بحث خاص بموقع <span class="highlight">القرمزي</span> للمسلسلات التركية
+    <div class="info-text">
+        البحث يشمل كافة حلقات وافلام موقع <span style="color: #e50914;">القرمزي</span>
+    </div>
+    
+    <div class="links">
+        <a href="https://kirmzi.tv/">الرئيسية</a>
+        <a href="https://kirmzi.tv/category/مسلسلات-تركية/">مسلسلات تركية</a>
+        <a href="https://kirmzi.tv/category/افلام-تركية/">افلام تركية</a>
     </div>
 </div>
 
 <script>
-    document.getElementById('searchForm').onsubmit = function() {
+    document.getElementById('searchForm').onsubmit = function(e) {
         var query = this.querySelector('input[name="s"]').value;
         if(query) {
-            // التوجيه المباشر لنتائج البحث في موقعك
+            // توجيه البحث لموقعك الاصلي
             window.location.href = "https://kirmzi.tv/?s=" + encodeURIComponent(query);
-            return false;
+            return false; 
         }
     };
 </script>
