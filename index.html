@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي - بحث ذكي</title>
+    <title>محرك بحث القرمزي - عالم المسلسلات التركية</title>
     <style>
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
@@ -14,37 +14,45 @@
         .logo-section { margin-bottom: 30px; }
         .logo-section img { max-width: 280px; height: auto; }
 
-        /* تخصيص محرك بحث جوجل ليتناسب مع تصميمك */
+        /* تخصيص شكل محرك بحث جوجل ليكون احترافيا */
         .gcse-searchbox-only { margin-top: 20px; }
         
-        /* اخفاء عناصر جوجل الاضافية للحفاظ على نظافة التصميم */
+        /* تحسين شكل صندوق البحث */
         .gsc-control-cse {
             background-color: transparent !important;
             border: none !important;
             padding: 0 !important;
         }
+        .gsc-search-button-v2 {
+            background-color: #e50914 !important;
+            border-radius: 20px !important;
+            border: none !important;
+            padding: 10px 20px !important;
+        }
         input.gsc-input {
             background: #1a1a1a !important;
-            border: 2px solid #333 !important;
-            border-radius: 30px !important;
+            border: 1px solid #333 !important;
+            border-radius: 25px !important;
             color: white !important;
-            padding: 12px 20px !important;
+            padding: 10px 15px !important;
             font-size: 16px !important;
         }
         input.gsc-input:focus {
             border-color: #e50914 !important;
-            outline: none !important;
         }
-        .gsc-search-button-v2 {
-            background-color: #e50914 !important;
-            border-radius: 30px !important;
-            padding: 10px 20px !important;
-            border: none !important;
-        }
-        /* تعديل شكل قائمة الاقتراحات */
+
+        /* تعديل شكل الاقتراحات لتظهر مثل جوجل تماما */
         .gstl_50.gssb_c { z-index: 9999 !important; text-align: right !important; }
-        .gssb_m { background: #1a1a1a !important; color: white !important; border: 1px solid #333 !important; }
-        .gssb_a td { background: #222 !important; color: #e50914 !important; }
+        .gssb_m { 
+            background: #1a1a1a !important; 
+            color: white !important; 
+            border: 1px solid #333 !important;
+            border-radius: 0 0 15px 15px !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+        }
+        .gssb_a td { background: #222 !important; color: #e50914 !important; cursor: pointer; }
+        
+        .footer-note { margin-top: 40px; color: #555; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -54,24 +62,24 @@
         <img src="kirmzi.tv.PNG" alt="القرمزي">
     </div>
 
-    <script async src="https://cse.google.com/cse.js?cx=8456108420e6e4f3a"></script>
+    <script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
     <div class="gcse-searchbox-only" data-resultsUrl="https://kirmzi.tv/"></div>
 
-    <div style="margin-top: 30px; color: #666; font-size: 14px;">
-        ابحث عن الحلقات والافلام المترجمة في موقع <span style="color: #e50914;">القرمزي</span>
+    <div class="footer-note">
+        جميع حقوق المحتوى محفوظة لموقع <span style="color: #e50914;">القرمزي</span> 2026
     </div>
 </div>
 
 <script>
-    // كود اضافي لتحسين توجيه البحث لموقعك مباشرة
+    // كود لتغيير نص المساعد داخل المربع وتعديل سلوك البحث
     window.onload = function() {
-        const interval = setInterval(() => {
-            const searchInput = document.querySelector('input.gsc-input');
-            if (searchInput) {
-                searchInput.placeholder = "ابحث عن مسلسلك المفضل...";
-                clearInterval(interval);
+        const checkExist = setInterval(function() {
+            const input = document.querySelector('input.gsc-input');
+            if (input) {
+                input.placeholder = "ابحث عن اي مسلسل او فيلم تركي...";
+                clearInterval(checkExist);
             }
-        }, 500);
+        }, 100);
     };
 </script>
 
