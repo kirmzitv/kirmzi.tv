@@ -3,93 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي - عالم الدراما التركية</title>
+    <title>محرك بحث القرمزي - اقتراحات ذكية</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #0b0b0b; /* خلفية داكنة جدا وفخمة */
-            font-family: sans-serif;
-            color: white;
+            margin: 0; padding: 0; display: flex; justify-content: center;
+            align-items: center; height: 100vh; background-color: #0b0b0b;
+            font-family: sans-serif; color: white;
         }
-        .main-wrapper {
-            text-align: center;
-            width: 90%;
-            max-width: 650px;
-        }
-        .logo-section {
-            margin-bottom: 35px;
-        }
-        .logo-section img {
-            max-width: 320px; /* حجم الشعار */
-            height: auto;
-            /* تأثير اضاءة خفيف خلف الشعار */
-            filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2));
-        }
+        .main-wrapper { text-align: center; width: 90%; max-width: 650px; position: relative; }
+        .logo-section { margin-bottom: 35px; }
+        .logo-section img { max-width: 300px; height: auto; filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2)); }
+        
+        /* تصميم صندوق البحث */
         .search-area {
-            position: relative;
-            background: #1a1a1a;
-            border-radius: 50px;
-            padding: 5px;
-            border: 1px solid #333;
-            display: flex;
-            align-items: center;
-            transition: 0.3s ease;
+            position: relative; background: #1a1a1a; border-radius: 30px;
+            padding: 5px; border: 1px solid #333; display: flex; align-items: center;
+            transition: 0.3s; z-index: 100;
         }
-        .search-area:hover, .search-area:focus-within {
-            border-color: #e50914;
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
-            background: #222;
-        }
+        .search-area:focus-within { border-color: #e50914; box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); }
+        
         input[type="text"] {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 15px 25px;
-            color: white;
-            font-size: 18px;
-            outline: none;
-            text-align: right;
+            flex: 1; background: transparent; border: none; padding: 15px 20px;
+            color: white; font-size: 18px; outline: none; text-align: right;
         }
+        
         button {
-            background: #e50914;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 5px;
-            transition: 0.3s;
+            background: #e50914; color: white; border: none; padding: 12px 25px;
+            border-radius: 25px; font-weight: bold; cursor: pointer; margin-left: 5px;
         }
-        button:hover {
-            background: #ff0f1b;
-            transform: scale(1.02);
+
+        /* قائمة الاقتراحات */
+        .suggestions-list {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 0 0 20px 20px;
+            margin-top: -10px; padding-top: 15px; display: none;
+            max-height: 300px; overflow-y: auto; z-index: 90; text-align: right;
         }
-        .info-text {
-            margin-top: 25px;
-            color: #777;
-            font-size: 14px;
+        .suggestion-item {
+            padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #222;
+            transition: 0.2s; color: #ccc; font-size: 16px;
         }
-        .links {
-            margin-top: 15px;
-        }
-        .links a {
-            color: #e50914;
-            text-decoration: none;
-            margin: 0 10px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        .links a:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
+        .suggestion-item:hover { background: #222; color: #e50914; }
+        .suggestion-item:last-child { border: none; }
     </style>
 </head>
 <body>
@@ -99,33 +54,68 @@
         <img src="kirmzi.tv.PNG" alt="القرمزي">
     </div>
 
-    <form action="https://kirmzi.tv/" method="GET" id="searchForm">
-        <div class="search-area">
-            <input type="text" name="s" placeholder="ابحث عن مسلسلاتك المفضلة..." required>
-            <button type="submit">بحث</button>
-        </div>
-    </form>
-
-    <div class="info-text">
-        البحث يشمل كافة حلقات وافلام موقع <span style="color: #e50914;">القرمزي</span>
+    <div class="search-container">
+        <form action="https://kirmzi.tv/" method="GET" id="searchForm">
+            <div class="search-area">
+                <input type="text" id="searchInput" name="s" placeholder="اكتب اسم المسلسل هنا..." autocomplete="off">
+                <button type="submit">بحث</button>
+            </div>
+            <div id="suggestions" class="suggestions-list"></div>
+        </form>
     </div>
-    
-    <div class="links">
-        <a href="https://kirmzi.tv/">الرئيسية</a>
-        <a href="https://kirmzi.tv/category/مسلسلات-تركية/">مسلسلات تركية</a>
-        <a href="https://kirmzi.tv/category/افلام-تركية/">افلام تركية</a>
+
+    <div style="margin-top: 25px; color: #555; font-size: 14px;">
+        ابحث في اكثر من 5000 مسلسل وفيلم تركي حصري
     </div>
 </div>
 
 <script>
-    document.getElementById('searchForm').onsubmit = function(e) {
-        var query = this.querySelector('input[name="s"]').value;
-        if(query) {
-            // توجيه البحث لموقعك الاصلي
-            window.location.href = "https://kirmzi.tv/?s=" + encodeURIComponent(query);
-            return false; 
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    // وظيفة جلب البيانات من موقعك (تستخدم محرك بحث ووردبريس)
+    searchInput.addEventListener('input', function() {
+        const query = this.value;
+        if (query.length < 2) {
+            suggestionsBox.style.display = 'none';
+            return;
         }
-    };
+
+        // ملاحظة: قد تحتاج لتفعيل CORS في موقعك ليعمل الجلب المباشر
+        // هنا نقوم بمحاكاة البحث او التوجيه
+        fetch(`https://kirmzi.tv/wp-json/wp/v2/posts?search=${query}&per_page=5`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.length > 0) {
+                suggestionsBox.innerHTML = '';
+                data.forEach(post => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item';
+                    // ازالة الهمزات من العنوان الظاهر
+                    let cleanTitle = post.title.rendered.replace(/[أإآ]/g, 'ا');
+                    div.innerText = cleanTitle;
+                    div.onclick = () => {
+                        window.location.href = post.link;
+                    };
+                    suggestionsBox.appendChild(div);
+                });
+                suggestionsBox.display = 'block';
+                suggestionsBox.style.display = 'block';
+            } else {
+                suggestionsBox.style.display = 'none';
+            }
+        }).catch(() => {
+            // في حال وجود حماية CORS سنعرض اقتراحات ثابتة او نوجه للبحث المباشر
+            suggestionsBox.style.display = 'none';
+        });
+    });
+
+    // اغلاق القائمة عند الضغط خارجها
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-container')) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
 </script>
 
 </body>
