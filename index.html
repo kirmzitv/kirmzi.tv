@@ -1,224 +1,235 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي - عالم الدراما</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محرك بحث القرمزي - عالم الدراما</title>
 
-    <script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
+<script async src="https://cse.google.com/cse.js?cx=3722f7c69721340db"></script>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #0b0b0b;
-            font-family: sans-serif;
-            color: white;
-            overflow: hidden;
-        }
+<style>
+body{
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#0b0b0b;
+    font-family:sans-serif;
+    color:white;
+    overflow:hidden;
+}
 
-        .main-wrapper {
-            text-align: center;
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-        }
+.main-wrapper{
+    text-align:center;
+    width:90%;
+    max-width:600px;
+}
 
-        .logo-section {
-            margin-bottom: 35px;
-        }
+/* 🔥 تحسين احترافي للشعار */
+.logo-section{
+    margin-bottom:40px;
+    animation:fadeIn 1.2s ease forwards;
+}
 
-        .logo-section img {
-            max-width: 320px;
-            height: auto;
-            filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2));
-        }
+.logo-section img{
+    width:340px;
+    max-width:90%;
+    border-radius:20px;
+    transition:0.4s ease;
+    filter:
+        drop-shadow(0 0 25px rgba(229,9,20,0.4))
+        drop-shadow(0 0 60px rgba(229,9,20,0.2));
+}
 
-        .search-box-container {
-            position: relative;
-            width: 100%;
-        }
+/* تأثير عند المرور */
+.logo-section img:hover{
+    transform:scale(1.05);
+    filter:
+        drop-shadow(0 0 35px rgba(229,9,20,0.7))
+        drop-shadow(0 0 80px rgba(229,9,20,0.4));
+}
 
-        .custom-bar {
-            display: flex;
-            align-items: center;
-            background: #1a1a1a;
-            border-radius: 50px;
-            padding: 6px 10px;
-            border: 1px solid #333;
-            transition: 0.3s ease;
-        }
+/* حركة دخول ناعمة */
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.9);}
+    to{opacity:1; transform:scale(1);}
+}
 
-        .custom-bar:focus-within {
-            border-color: #e50914;
-            box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
-        }
+/* صندوق البحث */
+.search-box-container{
+    position:relative;
+    width:100%;
+}
 
-        input#mainSearch {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px 20px;
-            color: white;
-            font-size: 18px;
-            outline: none;
-            text-align: right;
-        }
+.custom-bar{
+    display:flex;
+    align-items:center;
+    background:#1a1a1a;
+    border-radius:50px;
+    padding:6px 10px;
+    border:1px solid #333;
+    transition:0.3s ease;
+}
 
-        .btn-search {
-            background: #e50914;
-            border: none;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            transition: 0.2s;
-        }
+.custom-bar:focus-within{
+    border-color:#e50914;
+    box-shadow:0 0 15px rgba(229,9,20,0.5);
+}
 
-        .btn-search:hover {
-            background: #ff121d;
-        }
+input#mainSearch{
+    flex:1;
+    background:transparent;
+    border:none;
+    padding:12px 20px;
+    color:white;
+    font-size:18px;
+    outline:none;
+    text-align:right;
+}
 
-        #sugBox {
-            position: absolute;
-            top: 110%;
-            left: 0;
-            right: 0;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 15px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        }
+.btn-search{
+    background:#e50914;
+    border:none;
+    color:white;
+    padding:10px 25px;
+    border-radius:40px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px;
+    transition:0.2s;
+}
 
-        .sug-item {
-            padding: 12px 20px;
-            text-align: right;
-            cursor: pointer;
-            border-bottom: 1px solid #222;
-            color: #bbb;
-            font-size: 15px;
-        }
+.btn-search:hover{
+    background:#ff121d;
+}
 
-        .sug-item:hover {
-            background: #e50914;
-            color: white;
-        }
+#sugBox{
+    position:absolute;
+    top:110%;
+    left:0;
+    right:0;
+    background:#1a1a1a;
+    border:1px solid #333;
+    border-radius:15px;
+    display:none;
+    z-index:1000;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.7);
+}
 
-        /* ✨ تكبير النص السفلي */
-        .footer-text {
-            margin-top: 35px;
-            color: #888;
-            font-size: 20px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
+.sug-item{
+    padding:12px 20px;
+    text-align:right;
+    cursor:pointer;
+    border-bottom:1px solid #222;
+    color:#bbb;
+    font-size:15px;
+}
 
-        .footer-text span {
-            color: #e50914;
-            font-weight: bold;
-            font-size: 22px;
-        }
-    </style>
+.sug-item:hover{
+    background:#e50914;
+    color:white;
+}
+
+/* النص السفلي */
+.footer-text{
+    margin-top:35px;
+    color:#888;
+    font-size:20px;
+    font-weight:500;
+}
+
+.footer-text span{
+    color:#e50914;
+    font-weight:bold;
+    font-size:22px;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="main-wrapper">
+<div class="main-wrapper">
 
-        <div class="logo-section">
-            <img src="kirmzi.tv.PNG" alt="القرمزي">
-        </div>
+<div class="logo-section">
+    <img src="kirmzi.tv.PNG" alt="القرمزي">
+</div>
 
-        <div class="search-box-container">
-            <div class="custom-bar">
-                <input type="text" id="mainSearch" placeholder="ابحث عن مسلسلك المفضل..." autocomplete="off">
-                <button class="btn-search" id="execSearch">بحث</button>
-            </div>
-            <div id="sugBox"></div>
-        </div>
-
-        <div class="footer-text">
-            محرك بحث ذكي مخصص لموقع 
-            <span>القرمزي</span>
-        </div>
-
+<div class="search-box-container">
+    <div class="custom-bar">
+        <input type="text" id="mainSearch" placeholder="ابحث عن مسلسلك المفضل..." autocomplete="off">
+        <button class="btn-search" id="execSearch">بحث</button>
     </div>
+    <div id="sugBox"></div>
+</div>
+
+<div class="footer-text">
+    محرك بحث ذكي مخصص لموقع <span>القرمزي</span>
+</div>
+
+</div>
 
 <script>
-const sInput = document.getElementById('mainSearch');
-const sBox = document.getElementById('sugBox');
-const sBtn = document.getElementById('execSearch');
+const sInput=document.getElementById('mainSearch');
+const sBox=document.getElementById('sugBox');
+const sBtn=document.getElementById('execSearch');
 let debounceTimer;
 
-function startSearch(val) {
-    if(val.trim() !== "") {
-        window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
+function startSearch(val){
+    if(val.trim()!==""){
+        window.location.href=`https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
     }
 }
 
-sBtn.onclick = () => startSearch(sInput.value);
+sBtn.onclick=()=>startSearch(sInput.value);
 
-sInput.addEventListener("keydown", function(e){
-    if(e.key === "Enter") startSearch(this.value);
-    if(e.key === "Escape") sBox.style.display = "none";
+sInput.addEventListener("keydown",function(e){
+    if(e.key==="Enter") startSearch(this.value);
+    if(e.key==="Escape") sBox.style.display="none";
 });
 
-sInput.addEventListener("input", function(){
+sInput.addEventListener("input",function(){
     clearTimeout(debounceTimer);
-    const q = this.value.trim();
-
-    if(q.length < 2){
-        sBox.style.display = "none";
+    const q=this.value.trim();
+    if(q.length<2){
+        sBox.style.display="none";
         return;
     }
-
-    debounceTimer = setTimeout(() => {
-        fetchSuggestions(q);
-    }, 300);
+    debounceTimer=setTimeout(()=>{fetchSuggestions(q);},300);
 });
 
 function fetchSuggestions(query){
-    const script = document.createElement("script");
-    script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=googleSuggest`;
+    const script=document.createElement("script");
+    script.src=`https://suggestqueries.google.com/complete/search?client=chrome&q=${encodeURIComponent(query)}&callback=googleSuggest`;
     document.body.appendChild(script);
     document.body.removeChild(script);
 }
 
-window.googleSuggest = function(data){
-    const suggestions = data[1];
-    sBox.innerHTML = "";
-
-    if(suggestions.length === 0){
-        sBox.style.display = "none";
+window.googleSuggest=function(data){
+    const suggestions=data[1];
+    sBox.innerHTML="";
+    if(suggestions.length===0){
+        sBox.style.display="none";
         return;
     }
-
-    suggestions.slice(0,6).forEach(text => {
-        const div = document.createElement("div");
-        div.className = "sug-item";
-        div.textContent = text;
-        div.onclick = () => {
-            sInput.value = text;
+    suggestions.slice(0,6).forEach(text=>{
+        const div=document.createElement("div");
+        div.className="sug-item";
+        div.textContent=text;
+        div.onclick=()=>{
+            sInput.value=text;
             startSearch(text);
         };
         sBox.appendChild(div);
     });
-
-    sBox.style.display = "block";
+    sBox.style.display="block";
 };
 
-document.addEventListener("click", function(e){
+document.addEventListener("click",function(e){
     if(!e.target.closest(".search-box-container")){
-        sBox.style.display = "none";
+        sBox.style.display="none";
     }
 });
 </script>
