@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرك بحث القرمزي - مسلسلات وافلام تركية</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0d0d0d; /* لون غامق يناسب القرمزي */
+            font-family: sans-serif;
+        }
+        .search-container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo img {
+            max-width: 200px;
+        }
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 2px solid #e50914; /* لون القرمزي المميز */
+            background: #1a1a1a;
+            color: white;
+            font-size: 18px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+        }
+        button {
+            position: absolute;
+            left: 10px;
+            background: #e50914;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .footer-text {
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="search-container">
+    <div class="logo">
+        <h1 style="color: #e50914; font-size: 48px; margin: 0;">القرمزي</h1>
+        <p style="color: #eee; margin-top: 5px;">عالم المسلسلات والافلام التركية</p>
+    </div>
+
+    <form action="https://kirmzi.tv/" method="GET" id="searchForm">
+        <div class="search-box">
+            <input type="text" name="s" placeholder="ابحث عن مسلسلك المفضل..." required>
+            <button type="submit">بحث</button>
+        </div>
+    </form>
+
+    <div class="footer-text">
+        نتائج البحث تظهر مباشرة من موقع kirmzi.tv
+    </div>
+</div>
+
+<script>
+    // لضمان توجيه البحث بشكل صحيح لمحرك بحث الووردبريس الخاص بموقعك
+    document.getElementById('searchForm').onsubmit = function() {
+        var query = this.querySelector('input[name="s"]').value;
+        if(query) {
+            window.location.href = "https://kirmzi.tv/?s=" + encodeURIComponent(query);
+            return false;
+        }
+    };
+</script>
+
+</body>
+</html>
