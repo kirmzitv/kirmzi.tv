@@ -14,6 +14,7 @@
         .logo-section { margin-bottom: 35px; }
         .logo-section img { max-width: 300px; height: auto; filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); }
 
+        /* صندوق البحث الاحترافي - بدون اي لون ابيض */
         .search-box-container { position: relative; width: 100%; }
         .custom-bar {
             display: flex; align-items: center; background: #1a1a1a;
@@ -33,7 +34,7 @@
             font-weight: bold;
         }
 
-        /* قائمة الاقتراحات - Autocomplete */
+        /* قائمة الاقتراحات (الاكمال التلقائي) */
         #sugBox {
             position: absolute; top: 110%; left: 0; right: 0;
             background: #1a1a1a; border: 1px solid #333; border-radius: 15px;
@@ -68,6 +69,7 @@
     const sBox = document.getElementById('sugBox');
     const sBtn = document.getElementById('execSearch');
 
+    // وظيفة التوجه لنتائج البحث في موقعك
     function startSearch(val) {
         if(val) window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
     }
@@ -75,32 +77,32 @@
     sBtn.onclick = () => startSearch(sInput.value);
     sInput.onkeydown = (e) => { if(e.key === 'Enter') startSearch(sInput.value); };
 
-    // جلب الاقتراحات فورا عند الكتابة
+    // تفعيل الاكمال التلقائي الذكي
     sInput.addEventListener('input', function() {
         const query = this.value;
         if(query.length < 2) { sBox.style.display = 'none'; return; }
 
-        // استخدام واجهة البحث المباشرة لجلب كلمات الاكمال التلقائي
+        // استدعاء الاقتراحات عبر محرك بحث جوجل المخصص لموقعك
         const script = document.createElement('script');
-        script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=site:kirmzi.tv ${query}&callback=showSug`;
+        script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=site:kirmzi.tv ${query}&callback=renderSuggestions`;
         document.body.appendChild(script);
         document.body.removeChild(script);
     });
 
-    window.showSug = function(data) {
-        const suggestions = data[1];
-        if(suggestions && suggestions.length > 0) {
+    window.renderSuggestions = function(data) {
+        const results = data[1];
+        if(results && results.length > 0) {
             sBox.innerHTML = '';
-            suggestions.slice(0, 7).forEach(item => {
-                // تنظيف الكلمات من اسم الموقع ليظهر اسم المسلسل فقط
-                const cleanText = item.replace('site:kirmzi.tv', '').trim();
-                if(cleanText) {
+            results.slice(0, 6).forEach(item => {
+                // تنظيف النص ليظهر اسم المسلسل فقط بدون اسم الموقع
+                const clean = item.replace('site:kirmzi.tv', '').trim();
+                if(clean) {
                     const div = document.createElement('div');
                     div.className = 'sug-item';
-                    div.innerText = cleanText;
+                    div.innerText = clean;
                     div.onclick = function() {
-                        sInput.value = cleanText;
-                        startSearch(cleanText);
+                        sInput.value = clean;
+                        startSearch(clean);
                     };
                     sBox.appendChild(div);
                 }
@@ -111,6 +113,7 @@
         }
     };
 
+    // اخفاء القائمة عند النقر في اي مكان اخر
     document.onclick = (e) => { if(!e.target.closest('.search-box-container')) sBox.style.display = 'none'; };
 </script>
 
