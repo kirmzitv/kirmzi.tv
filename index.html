@@ -27,28 +27,31 @@ body{
     max-width:600px;
 }
 
-/* 🔥 تحسين احترافي للشعار */
+/* دمج الشعار مع الخلفية */
 .logo-section{
-    margin-bottom:40px;
-    animation:fadeIn 1.2s ease forwards;
+    margin-bottom: 40px;
+    animation: fadeIn 1.2s ease forwards;
 }
 
 .logo-section img{
-    width:340px;
-    max-width:90%;
-    border-radius:20px;
-    transition:0.4s ease;
-    filter:
-        drop-shadow(0 0 25px rgba(229,9,20,0.4))
-        drop-shadow(0 0 60px rgba(229,9,20,0.2));
+    width: 300px;
+    max-width: 85%;
+    background: transparent;
+    border-radius: 0;   /* إزالة الشكل المربع */
+    box-shadow: none;   /* إزالة أي إطار */
+    transition: 0.4s ease;
+    filter: drop-shadow(0 0 35px rgba(229,9,20,0.55));
 }
 
-/* تأثير عند المرور */
+/* تأثير احترافي خفيف عند المرور */
 .logo-section img:hover{
-    transform:scale(1.05);
-    filter:
-        drop-shadow(0 0 35px rgba(229,9,20,0.7))
-        drop-shadow(0 0 80px rgba(229,9,20,0.4));
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 55px rgba(229,9,20,0.85));
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(-15px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
 /* حركة دخول ناعمة */
