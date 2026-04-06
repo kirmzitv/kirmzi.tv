@@ -5,45 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محرك بحث القرمزي</title>
     <style>
+        /* التصميم الذي اعجبك: خلفية سوداء بالكامل */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
             align-items: center; height: 100vh; background-color: #0b0b0b;
-            font-family: sans-serif; color: white;
+            font-family: sans-serif; color: white; overflow: hidden;
         }
         .main-wrapper { text-align: center; width: 90%; max-width: 600px; position: relative; }
+        
         .logo-section { margin-bottom: 35px; }
-        .logo-section img { max-width: 300px; height: auto; filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); }
+        .logo-section img { 
+            max-width: 320px; height: auto; 
+            filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); 
+        }
 
-        /* صندوق البحث الاحترافي - بدون اي لون ابيض */
+        /* صندوق البحث: بدون اي اطارات بيضاء او تداخل من جوجل */
         .search-box-container { position: relative; width: 100%; }
+        
         .custom-bar {
             display: flex; align-items: center; background: #1a1a1a;
             border-radius: 50px; padding: 6px 10px; border: 1px solid #333;
             transition: 0.3s ease;
         }
-        .custom-bar:focus-within { border-color: #e50914; box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
+        .custom-bar:focus-within {
+            border-color: #e50914;
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+        }
 
         input#mainSearch {
             flex: 1; background: transparent !important; border: none !important;
             padding: 12px 20px; color: white !important; font-size: 18px;
             outline: none !important; text-align: right;
         }
+
         .btn-search {
             background: #e50914; border: none; color: white;
             padding: 10px 25px; border-radius: 40px; cursor: pointer;
-            font-weight: bold;
+            font-weight: bold; font-size: 15px;
         }
 
-        /* قائمة الاقتراحات (الاكمال التلقائي) */
+        /* قائمة الاقتراحات: تظهر بشكل منسدل واحترافي */
         #sugBox {
             position: absolute; top: 110%; left: 0; right: 0;
             background: #1a1a1a; border: 1px solid #333; border-radius: 15px;
             display: none; z-index: 9999; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
         .sug-item {
             padding: 12px 20px; text-align: right; cursor: pointer;
-            border-bottom: 1px solid #222; color: #ddd; font-size: 16px;
+            border-bottom: 1px solid #222; color: #bbb; font-size: 16px;
         }
         .sug-item:hover { background: #e50914; color: white; }
     </style>
@@ -69,40 +79,40 @@
     const sBox = document.getElementById('sugBox');
     const sBtn = document.getElementById('execSearch');
 
-    // وظيفة التوجه لنتائج البحث في موقعك
+    // وظيفة البحث
     function startSearch(val) {
-        if(val) window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
+        if(val) window.location.href = "https://kirmzi.tv/?s=" + encodeURIComponent(val);
     }
 
     sBtn.onclick = () => startSearch(sInput.value);
     sInput.onkeydown = (e) => { if(e.key === 'Enter') startSearch(sInput.value); };
 
-    // تفعيل الاكمال التلقائي الذكي
+    // البرمجة الخاصة بالاكمال التلقائي
     sInput.addEventListener('input', function() {
         const query = this.value;
         if(query.length < 2) { sBox.style.display = 'none'; return; }
 
-        // استدعاء الاقتراحات عبر محرك بحث جوجل المخصص لموقعك
+        // جلب الاقتراحات من محرك بحثك في جوجل بشكل خفي
         const script = document.createElement('script');
-        script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=site:kirmzi.tv ${query}&callback=renderSuggestions`;
+        script.src = "https://suggestqueries.google.com/complete/search?client=chrome&q=site:kirmzi.tv " + query + "&callback=handleResults";
         document.body.appendChild(script);
         document.body.removeChild(script);
     });
 
-    window.renderSuggestions = function(data) {
-        const results = data[1];
-        if(results && results.length > 0) {
+    window.handleResults = function(data) {
+        const suggestions = data[1];
+        if(suggestions && suggestions.length > 0) {
             sBox.innerHTML = '';
-            results.slice(0, 6).forEach(item => {
-                // تنظيف النص ليظهر اسم المسلسل فقط بدون اسم الموقع
-                const clean = item.replace('site:kirmzi.tv', '').trim();
-                if(clean) {
+            suggestions.slice(0, 6).forEach(item => {
+                // تنظيف النتيجة من "site:kirmzi.tv"
+                const cleanText = item.replace('site:kirmzi.tv', '').trim();
+                if(cleanText) {
                     const div = document.createElement('div');
                     div.className = 'sug-item';
-                    div.innerText = clean;
+                    div.innerText = cleanText;
                     div.onclick = function() {
-                        sInput.value = clean;
-                        startSearch(clean);
+                        sInput.value = cleanText;
+                        startSearch(cleanText);
                     };
                     sBox.appendChild(div);
                 }
@@ -113,7 +123,7 @@
         }
     };
 
-    // اخفاء القائمة عند النقر في اي مكان اخر
+    // اخفاء القائمة عند الضغط خارجها
     document.onclick = (e) => { if(!e.target.closest('.search-box-container')) sBox.style.display = 'none'; };
 </script>
 
