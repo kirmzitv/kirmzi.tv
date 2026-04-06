@@ -5,38 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محرك بحث القرمزي - عالم الدراما التركية</title>
     <style>
+        /* التنسيق العام للخلفية */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
-            align-items: center; height: 100vh; background-color: #0b0b0b;
+            align-items: center; height: 100vh; background-color: #0b0b0b !important;
             font-family: sans-serif; color: white;
         }
         .main-wrapper { text-align: center; width: 90%; max-width: 650px; }
+        
+        /* تنسيق الشعار */
         .logo-section { margin-bottom: 35px; }
-        .logo-section img { max-width: 320px; height: auto; filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2)); }
+        .logo-section img { 
+            max-width: 320px; height: auto; 
+            filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.2)); 
+        }
 
-        /* تخصيص محرك بحث جوجل ليناسب التصميم القديم */
+        /* اجبار محرك بحث جوجل على الاختفاء والظهور بتصميمنا */
         .gsc-control-cse {
             background-color: transparent !important;
             border: none !important;
             padding: 0 !important;
         }
-        form.gsc-search-box { margin-bottom: 0 !important; }
+        .gsc-search-button-v2, .gcsc-branding, .gsc-adBlock {
+            display: none !important; /* اخفاء شعار جوجل والازرار الزرقاء */
+        }
         
-        /* اخفاء زر جوجل الافتراضي وشعار جوجل */
-        .gsc-search-button-v2, .gcsc-branding { display: none !important; }
-        
-        /* تصميم مربع البحث ليطابق الشكل الذي اعجبك */
+        /* تصميم مربع البحث الاحترافي */
         input.gsc-input {
             background: #1a1a1a !important;
-            border: 1px solid #333 !important;
+            border: 2px solid #333 !important;
             border-radius: 50px !important;
             color: white !important;
             padding: 15px 25px !important;
             font-size: 18px !important;
-            height: auto !important;
+            height: 55px !important;
             outline: none !important;
-            transition: 0.3s ease;
             text-align: right !important;
+            transition: 0.3s ease !important;
         }
         input.gsc-input:focus {
             border-color: #e50914 !important;
@@ -44,7 +49,7 @@
             background: #222 !important;
         }
 
-        /* تخصيص قائمة الاقتراحات (Autocomplete) */
+        /* تنسيق قائمة الاقتراحات المنسدلة */
         .gstl_50.gssb_c { z-index: 9999 !important; text-align: right !important; }
         .gssb_m { 
             background: #1a1a1a !important; 
@@ -52,13 +57,16 @@
             border: 1px solid #333 !important;
             border-radius: 0 0 20px 20px !important;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+        }
+        .gssb_a td { 
+            background: #222 !important; 
+            color: #e50914 !important; 
+            padding: 10px 20px !important;
             cursor: pointer;
         }
-        .gssb_a td { background: #222 !important; color: #e50914 !important; }
-        .gssb_e { display: none !important; } /* اخفاء تذييل جوجل */
-
+        
         .info-text { margin-top: 25px; color: #777; font-size: 14px; }
-        .highlight { color: #e50914; }
+        .highlight { color: #e50914; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -72,21 +80,20 @@
     <div class="gcse-searchbox-only" data-resultsUrl="https://kirmzi.tv/"></div>
 
     <div class="info-text">
-        ابحث عن حلقاتك المفضلة في موقع <span class="highlight">القرمزي</span>
+        ابحث عن احدث الحلقات في موقع <span class="highlight">القرمزي</span>
     </div>
 </div>
 
 <script>
-    // تغيير النص المساعد داخل المربع بمجرد تحميله
+    // وظيفة لتغيير نص المربع بعد تحميله من جوجل
     window.onload = function() {
-        const checkInput = setInterval(function() {
-            const input = document.querySelector('input.gsc-input');
+        var checkInput = setInterval(function() {
+            var input = document.querySelector('input.gsc-input');
             if (input) {
-                input.placeholder = "ابحث عن مسلسلاتك المفضل...";
-                // تعديل زر الادخال ليقوم بالبحث عند الضغط على Enter
+                input.placeholder = "ابحث عن مسلسلك المفضل...";
                 clearInterval(checkInput);
             }
-        }, 100);
+        }, 200);
     };
 </script>
 
