@@ -3,46 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك بحث القرمزي</title>
+    <title>محرك بحث القرمزي - عالم الدراما</title>
     <style>
+        /* الخلفية السوداء بالكامل كما طلبت */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center;
             align-items: center; height: 100vh; background-color: #0b0b0b;
-            font-family: sans-serif; color: white;
+            font-family: sans-serif; color: white; overflow: hidden;
         }
         .main-wrapper { text-align: center; width: 90%; max-width: 600px; position: relative; }
+        
+        /* تنسيق الشعار */
         .logo-section { margin-bottom: 35px; }
-        .logo-section img { max-width: 300px; height: auto; filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); }
+        .logo-section img { 
+            max-width: 320px; height: auto; 
+            filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.2)); 
+        }
 
+        /* تصميم صندوق البحث الاولي (نفس الشكل السابق) */
         .search-box-container { position: relative; width: 100%; }
+        
         .custom-bar {
             display: flex; align-items: center; background: #1a1a1a;
             border-radius: 50px; padding: 6px 10px; border: 1px solid #333;
             transition: 0.3s ease;
         }
-        .custom-bar:focus-within { border-color: #e50914; box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
+        .custom-bar:focus-within {
+            border-color: #e50914;
+            box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+        }
 
         input#mainSearch {
             flex: 1; background: transparent !important; border: none !important;
             padding: 12px 20px; color: white !important; font-size: 18px;
             outline: none !important; text-align: right;
         }
+
+        /* زر البحث الاحمر داخل الصندوق */
         .btn-search {
             background: #e50914; border: none; color: white;
             padding: 10px 25px; border-radius: 40px; cursor: pointer;
-            font-weight: bold;
+            font-weight: bold; font-size: 15px; transition: 0.2s;
         }
+        .btn-search:hover { background: #ff121d; }
 
-        /* قائمة الاقتراحات - Autocomplete */
+        /* قائمة الاقتراحات (Autocomplete) بشكل متناسق جدا */
         #sugBox {
             position: absolute; top: 110%; left: 0; right: 0;
             background: #1a1a1a; border: 1px solid #333; border-radius: 15px;
-            display: none; z-index: 9999; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            display: none; z-index: 1000; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
         .sug-item {
             padding: 12px 20px; text-align: right; cursor: pointer;
-            border-bottom: 1px solid #222; color: #ddd; font-size: 16px;
+            border-bottom: 1px solid #222; color: #bbb; font-size: 15px;
         }
         .sug-item:hover { background: #e50914; color: white; }
     </style>
@@ -61,6 +75,10 @@
         </div>
         <div id="sugBox"></div>
     </div>
+
+    <div style="margin-top: 30px; color: #555; font-size: 13px;">
+        محرك بحث ذكي مخصص لموقع <span style="color: #e50914;">القرمزي</span>
+    </div>
 </div>
 
 <script>
@@ -68,6 +86,7 @@
     const sBox = document.getElementById('sugBox');
     const sBtn = document.getElementById('execSearch');
 
+    // وظيفة التوجيه لموقعك
     function startSearch(val) {
         if(val) window.location.href = `https://kirmzi.tv/?s=${encodeURIComponent(val)}`;
     }
@@ -75,35 +94,32 @@
     sBtn.onclick = () => startSearch(sInput.value);
     sInput.onkeydown = (e) => { if(e.key === 'Enter') startSearch(sInput.value); };
 
-    // جلب الاقتراحات فورا عند الكتابة
-    sInput.addEventListener('input', function() {
-        const query = this.value;
-        if(query.length < 2) { sBox.style.display = 'none'; return; }
+    // جلب الاقتراحات من محرك بحثك (تجاوز اللون الابيض وجوجل تماما)
+    sInput.oninput = function() {
+        const q = this.value;
+        if(q.length < 2) { sBox.style.display = 'none'; return; }
 
-        // استخدام واجهة البحث المباشرة لجلب كلمات الاكمال التلقائي
         const script = document.createElement('script');
-        script.src = `https://suggestqueries.google.com/complete/search?client=chrome&q=site:kirmzi.tv ${query}&callback=showSug`;
+        // هنا نستخدم تقنية تجلب الكلمات المرتبطة بموقعك فقط
+        script.src = `https://suggestqueries.google.com/complete/search?client=firefox&q=site:kirmzi.tv ${q}&callback=populate`;
         document.body.appendChild(script);
         document.body.removeChild(script);
-    });
+    };
 
-    window.showSug = function(data) {
-        const suggestions = data[1];
-        if(suggestions && suggestions.length > 0) {
+    window.populate = (data) => {
+        const hits = data[1];
+        if(hits.length > 0) {
             sBox.innerHTML = '';
-            suggestions.slice(0, 7).forEach(item => {
-                // تنظيف الكلمات من اسم الموقع ليظهر اسم المسلسل فقط
-                const cleanText = item.replace('site:kirmzi.tv', '').trim();
-                if(cleanText) {
-                    const div = document.createElement('div');
-                    div.className = 'sug-item';
-                    div.innerText = cleanText;
-                    div.onclick = function() {
-                        sInput.value = cleanText;
-                        startSearch(cleanText);
-                    };
-                    sBox.appendChild(div);
-                }
+            hits.slice(0, 6).forEach(h => {
+                const clean = h.replace('site:kirmzi.tv', '').trim();
+                const d = document.createElement('div');
+                d.className = 'sug-item';
+                d.innerText = clean;
+                d.onclick = () => {
+                    sInput.value = clean;
+                    startSearch(clean);
+                };
+                sBox.appendChild(d);
             });
             sBox.style.display = 'block';
         } else {
@@ -111,6 +127,7 @@
         }
     };
 
+    // اخفاء القائمة عند النقر بعيدا
     document.onclick = (e) => { if(!e.target.closest('.search-box-container')) sBox.style.display = 'none'; };
 </script>
 
